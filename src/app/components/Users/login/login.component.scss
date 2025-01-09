@@ -1,0 +1,103 @@
+// Mainīgie krāsām
+$primary-color: #007bff;
+$secondary-color: #f8f9fa;
+$error-color: #dc3545;
+$input-border-color: #ced4da;
+$input-focus-color: $primary-color;
+
+// Vispārējais izkārtojums
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: $secondary-color;
+}
+
+.login-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+// Virsraksti
+.login-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: $primary-color;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #6c757d;
+}
+
+// Veidlapas grupas
+.form-group {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #495057;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid $input-border-color;
+    border-radius: 5px;
+
+    &:focus {
+      outline: none;
+      border-color: $input-focus-color;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    &.invalid {
+      border-color: $error-color;
+    }
+  }
+}
+
+// Poga
+.login-button {
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+
+  &:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+}
+
+// Kļūdas ziņojumi
+.error-message {
+  color: $error-color;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.form-error {
+  color: $error-color;
+  margin-top: 1rem;
+}

@@ -1,0 +1,57 @@
+/* application-list.component.scss */
+
+/* Galvenais konteiners */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Pieteikumu saraksta elementi */
+  li {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    transition: box-shadow 0.3s ease;
+  
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  /* Motivācijas vēstules un statusa teksti */
+  p {
+    margin: 8px 0;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  /* Saite uz stipendijas detaļām */
+  .application-link {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  
+    &:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+  }
+  
+  /* Ielādes un nav pieteikumu ziņas */
+  p {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+  }
+  
+  p.no-applications {
+    font-style: italic;
+  }
+  

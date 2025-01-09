@@ -1,0 +1,30 @@
+<div class="sponsor-dashboard">
+    <h1>Manas Stipendijas</h1>
+  
+    <!-- Saraksts ar sponsora stipendijām -->
+    <section>
+      <ul>
+        <li *ngFor="let scholarship of scholarships">
+          <p><strong>{{ scholarship.title }}</strong> ({{ scholarship.status }})</p>
+          <p>{{ scholarship.description }}</p>
+          <button (click)="viewApplications(scholarship._id)">Apskatīt pieteikumus</button>
+          <button (click)="editScholarship(scholarship._id)">Rediģēt</button>
+          <button (click)="deleteScholarship(scholarship._id)">Dzēst</button>
+        </li>
+      </ul>
+    </section>
+  
+    <!-- Pieteikumu pārvaldība -->
+    <section *ngIf="selectedScholarship">
+      <h2>Pieteikumi stipendijai: {{ selectedScholarship.title }}</h2>
+      <ul>
+        <li *ngFor="let application of applications">
+          <p><strong>Students:</strong> {{ application.userId }}</p>
+          <p><strong>Motivācijas vēstule:</strong> {{ application.motivationLetter }}</p>
+          <button (click)="approveApplication(application._id)">Apstiprināt</button>
+          <button (click)="rejectApplication(application._id)">Noraidīt</button>
+        </li>
+      </ul>
+    </section>
+  </div>
+  

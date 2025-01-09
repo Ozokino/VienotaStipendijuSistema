@@ -1,0 +1,64 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+  <div class="container-fluid">
+    <!-- Logo un nosaukums -->
+    <a class="navbar-brand" href="#">
+      <img src="assets/logo.png" alt="Logo" height="40" width="30" class="navbar-logo" />
+      <span>Vienotā Stipendiju Sistēma</span>
+    </a>
+
+    <!-- Hamburger poga mobilajiem -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigācijas sadaļa -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Vidū loma -->
+      <ng-container *ngIf="loggedInUser$ | async as user">
+        <span class="role-display mx-auto">{{ user.role | titlecase }}</span>
+
+        <!-- Kreisās puses navigācija -->
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/scholarship-list">Stipendijas</a>
+          </li>
+          <li class="nav-item">
+            <a *ngIf="user.role ==='admin' || user.role === 'sponsor'" class="nav-link" routerLink="/scholarship-create">Izveido stipendiju</a>
+          </li>
+         
+          <li class="nav-item">
+            <a *ngIf="user.role ==='student'" class="nav-link" [routerLink]="['/applications']">Pietiekumi</a>
+            <a *ngIf="user.role === 'sponsor' || user.role === 'admin'" [routerLink]="['/applications']">Manas stipendijas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/user-details/{{ user._id }}">Profils</a>
+          </li>
+        </ul>
+
+        <!-- Labās puses navigācija -->
+        <div class="d-flex align-items-center">
+          <span class="navbar-text me-3 text-light">
+            Sveicināti, <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+          </span>
+          <button class="btn btn-outline-light ms-3" (click)="logout()">Iziet</button>
+        </div>
+      </ng-container>
+
+      <!-- Navigācija viesiem -->
+      <ng-container *ngIf="!(loggedInUser$ | async)">
+        <div class="d-flex ms-auto align-items-center">
+          <a class="btn btn-outline-light me-2" routerLink="/login">Pieslēgties</a>
+          <a class="btn btn-light text-primary" routerLink="/register">Reģistrēties</a>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,23 @@
+<div *ngIf="(applications$ | async) as applications; else loading">
+  <ul *ngIf="applications.length > 0; else noApplications">
+    <li *ngFor="let application of applications">
+      <a
+        *ngIf="application.scholarshipId"
+        [routerLink]="['/scholarship-details', application.scholarshipId]"
+        class="application-link"
+      >
+        Apskatīt stipendijas detaļas
+      </a>
+      <p>{{ application.motivationLetter }}</p>
+      <p>Statuss: {{ application.status }}</p>
+    </li>
+  </ul>
+</div>
+
+<ng-template #loading>
+  <p>Notiek datu ielāde...</p>
+</ng-template>
+
+<ng-template #noApplications>
+  <p>Nav atrasti pieteikumi.</p>
+</ng-template>

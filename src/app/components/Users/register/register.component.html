@@ -1,0 +1,109 @@
+<div *ngIf="!isVerificationStep" class="form-container">
+  <h1>Register</h1>
+  <form [formGroup]="registerForm" (ngSubmit)="registerUser()">
+    <!-- First Name & Last Name -->
+    <div class="form-row">
+      <label>
+        First Name:
+        <input type="text" formControlName="firstName" />
+      </label>
+      <label>
+        Last Name:
+        <input type="text" formControlName="lastName" />
+      </label>
+    </div>
+    <div *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+      First Name is required.
+    </div>
+    <div *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+      Last Name is required.
+    </div>
+
+    <!-- Email -->
+    <div class="form-row">
+      <label>
+        Email:
+        <input type="email" formControlName="email" />
+      </label>
+    </div>
+    <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+      Valid Email is required.
+    </div>
+
+    <!-- Password & Verify Password -->
+    <div class="form-row">
+      <label>
+        Password:
+        <input type="password" formControlName="password" />
+      </label>
+      <label>
+        Verify Password:
+        <input type="password" formControlName="verifyPassword" />
+      </label>
+    </div>
+    <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+      Password must be at least 6 characters.
+    </div>
+    <div *ngIf="registerForm.get('verifyPassword')?.invalid && registerForm.get('verifyPassword')?.touched">
+      Passwords must match.
+    </div>
+
+    <!-- Role -->
+    <div class="form-row">
+      <label>
+        Role:
+        <select formControlName="role" (change)="onRoleChange($event)">
+          <option value="student">Student</option>
+          <option value="sponsor">Sponsor</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Institution -->
+    <div class="form-row" *ngIf="registerForm.get('role')?.value === 'student'">
+      <label>
+        Institution:
+        <select formControlName="institution">
+          <option *ngFor="let institution of institutions" [value]="institution">
+            {{ institution }}
+          </option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Study Program -->
+    <div class="form-row" *ngIf="registerForm.get('role')?.value === 'student'">
+      <label>
+        Study Program:
+        <select formControlName="studyProgram">
+          <option *ngFor="let program of studyPrograms" [value]="program">
+            {{ program }}
+          </option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="registerForm.invalid">Register</button>
+  </form>
+</div>
+<!-- Verification Step -->
+<div *ngIf="isVerificationStep" class="form-container">
+  <h1>Email Verification</h1>
+  <div class="info-message">
+    A verification code has been sent to {{ userEmail }}. Please enter it below to verify your email.
+  </div>
+  <form [formGroup]="verificationForm" (ngSubmit)="verifyEmail()">
+    <label>
+      Verification Code:
+      <input type="text" formControlName="verificationCode" />
+    </label>
+    <div *ngIf="verificationForm.get('verificationCode')?.invalid && verificationForm.get('verificationCode')?.touched">
+      Verification code must be exactly 6 digits.
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="verificationForm.invalid">Verify Email</button>
+  </form>
+</div>
+

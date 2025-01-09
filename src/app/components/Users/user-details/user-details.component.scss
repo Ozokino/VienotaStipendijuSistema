@@ -1,0 +1,57 @@
+/* Globālais konteineris */
+div {
+    margin: 2rem auto;
+    max-width: 600px;
+    padding: 2rem;
+    background-color: #f8f9fa; /* Bootstrap gaišais fons */
+    border: 1px solid #dee2e6; /* Gaismas robeža */
+    border-radius: 0.5rem; /* Apaļi stūri */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Neliels ēnojums */
+  }
+  
+  /* Virsraksts */
+  h2 {
+    color: #343a40; /* Bootstrap tumšais teksts */
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Informācijas lauki */
+  p {
+    color: #495057; /* Bootstrap vidējais teksts */
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Uzsvars uz lauka nosaukumu */
+  strong {
+    color: #007bff; /* Bootstrap primārā krāsa */
+  }
+  
+  /* Ielādes ziņa */
+  p.loading {
+    color: #6c757d; /* Bootstrap sekundārais teksts */
+    font-style: italic;
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  
+  /* Universitātes lauka īpašais stils */
+  p *ngIf {
+    font-weight: 500;
+    color: #28a745; /* Bootstrap zaļā krāsa */
+  }
+  
+  /* Bootstrap responsivitātes funkcionalitāte */
+  @media (max-width: 768px) {
+    div {
+      padding: 1.5rem;
+      max-width: 90%;
+    }
+  
+    p {
+      font-size: 1rem;
+    }
+  }
+  

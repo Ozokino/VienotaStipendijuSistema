@@ -1,0 +1,22 @@
+<div *ngIf="scholarship" class="scholarship-details">
+  <h2>{{ scholarship.title }}</h2>
+  <p><strong>Study Program:</strong> {{ scholarship.studyProgram }}</p>
+  <p><strong>Description:</strong> {{ scholarship.description }}</p>
+  <p><strong>Type:</strong> {{ scholarship.type }}</p>
+  <p><strong>Amount:</strong> {{ scholarship.amount }}</p>
+  <p><strong>Requirements:</strong> {{ scholarship.requirements }}</p>
+  <p><strong>Deadline:</strong> {{ scholarship.deadline }}</p>
+  <p><strong>Created by:</strong> {{ creatorName }}</p>
+<div >
+  <h2>Pieteikšanās</h2>
+  <!-- Pieteikuma forma -->
+  <button 
+    [routerLink]="['/application-form', scholarship._id]" 
+    [queryParams]="{ scholarshipId: scholarship._id }" 
+    class="apply-button">
+    Pieteikties
+  </button>
+</div>
+  <div *ngIf="!scholarship" class="error-message">
+    <p>Scholarship details not available.</p>
+  </div>

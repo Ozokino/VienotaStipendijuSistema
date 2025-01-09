@@ -1,0 +1,12 @@
+<div *ngIf="user$ | async as user; else loading">
+  <h2>Profils</h2>
+  <p><strong>Vārds:</strong> {{ user.firstName }}</p>
+  <p><strong>Uzvārds:</strong> {{ user.lastName }}</p>
+  <p><strong>E-pasts:</strong> {{ user.email }}</p>
+  <p><strong>Loma:</strong> {{ user.role }}</p>
+  <p *ngIf="user.university"><strong>Universitāte:</strong> {{ user.university }}</p>
+</div>
+
+<ng-template #loading>
+  <p>Loading user details...</p>
+</ng-template>

@@ -1,0 +1,23 @@
+<h1>Stipendiju Saraksts</h1>
+
+<!-- Parāda stipendijas, ja ir pieejamas -->
+<div *ngIf="scholarships.length > 0; else noScholarships">
+  <ul>
+    <li *ngFor="let scholarship of scholarships">
+      <h2>{{ scholarship.title}}</h2>
+      <p><strong>Apraksts:</strong> {{ scholarship.description }}</p>
+      <p><strong>Tips:</strong> {{ scholarship.type === 'one-time' ? 'Vienreizēja' : 'Ikmēneša' }}</p>
+      <p><strong>Summa:</strong> {{ scholarship.amount }}</p>
+      <p><strong>Termiņš:</strong> {{ scholarship.deadline | date }}</p>
+      <!-- Navigācija uz detaļu komponenti -->
+      <button [routerLink]="['/scholarship-details', scholarship._id]" class="normal-links">
+        Skatīt detaļas
+      </button>
+    </li>
+  </ul>
+</div>
+
+<!-- Tukša saraksta gadījumā -->
+<ng-template #noScholarships>
+  <p>Pašlaik nav pieejamu stipendiju.</p>
+</ng-template>

@@ -1,0 +1,73 @@
+<h1>Izveidot stipendiju</h1>
+<form [formGroup]="scholarshipForm" (ngSubmit)="createScholarship()">
+  <!-- Nosaukums -->
+  <label>
+    Nosaukums:
+    <input type="text" formControlName="title" />
+  </label>
+  <div *ngIf="scholarshipForm.get('title')?.invalid && scholarshipForm.get('title')?.touched">
+    <small class="error">Nosaukums ir obligāts.</small>
+  </div>
+  <br />
+  <label>
+    Study Program:
+    <select formControlName="studyProgram">
+      <option *ngFor="let program of studyPrograms" [value]="program">
+        {{ program }}
+      </option>
+    </select>
+  </label>
+
+  <!-- Apraksts -->
+  <label>
+    Apraksts:
+    <textarea formControlName="description"></textarea>
+  </label>
+  <div *ngIf="scholarshipForm.get('description')?.invalid && scholarshipForm.get('description')?.touched">
+    <small class="error">Apraksts ir obligāts.</small>
+  </div>
+  <br />
+
+  <!-- Tips -->
+  <label>
+    Tips:
+    <select formControlName="type">
+      <option value="one-time">Vienreizēja</option>
+      <option value="monthly">Ikmēneša</option>
+    </select>
+  </label>
+  <br />
+
+  <!-- Summa -->
+  <label>
+    Summa:
+    <input type="text" formControlName="amount" />
+  </label>
+  <div *ngIf="scholarshipForm.get('amount')?.invalid && scholarshipForm.get('amount')?.touched">
+    <small class="error">Summai jābūt norādītai un derīgā formātā (piem., 500€).</small>
+  </div>
+  <br />
+
+  <!-- Prasības -->
+  <label>
+    Prasības:
+    <textarea formControlName="requirements"></textarea>
+  </label>
+  <div *ngIf="scholarshipForm.get('requirements')?.invalid && scholarshipForm.get('requirements')?.touched">
+    <small class="error">Prasības ir obligātas.</small>
+  </div>
+  <br />
+
+  <!-- Termiņš -->
+  <label>
+    Termiņš:
+    <input type="date" formControlName="deadline" />
+  </label>
+  <div *ngIf="scholarshipForm.get('deadline')?.invalid && scholarshipForm.get('deadline')?.touched">
+    <small class="error">Termiņš ir obligāts.</small>
+  </div>
+  <br />
+
+  <!-- Poga -->
+  <button type="submit" [disabled]="scholarshipForm.invalid">Izveidot</button>
+</form>
