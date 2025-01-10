@@ -1,14 +1,12 @@
 <div class="admin-dashboard">
   <h2>Administratora panelis</h2>
 
-  <!-- Toggles for different sections -->
   <div class="toggles">
     <button class="btn btn-primary" (click)="toggleSection('sponsors')">Sponsori</button>
     <button class="btn btn-primary" (click)="toggleSection('scholarships')">Stipendijas</button>
     <button class="btn btn-primary" (click)="toggleSection('users')">Lietotāji</button>
   </div>
 
-  <!-- Sponsors Section -->
   <div *ngIf="activeSection === 'sponsors'" class="section">
     <h3>Neapstiprināti Sponsori</h3>
     <div *ngIf="pendingSponsors.length; else noSponsors">
@@ -26,9 +24,8 @@
     </ng-template>
   </div>
 
-  <!-- Scholarships Section -->
   <div *ngIf="activeSection === 'scholarships'" class="section">
-    <h3>Pending Stipendijas</h3>
+    <h3>Neapstiprinātas Stipendijas</h3>
     <div *ngIf="pendingScholarships.length; else noScholarships">
       <ul class="list-group">
         <li *ngFor="let scholarship of pendingScholarships" class="list-group-item">
@@ -44,20 +41,41 @@
     </ng-template>
   </div>
 
-  <!-- Users Section -->
   <div *ngIf="activeSection === 'users'" class="section">
     <h3>Visi Lietotāji</h3>
-    <div *ngFor="let user of users$ | async">
-      <ul class="list-group">
-        <li  class="list-group-item">
-          <strong>{{ user.firstName }} {{ user.lastName }}</strong> - {{ user.role }}
-          <button [routerLink]="['/user-details', user._id]"class="btn btn-info btn-sm" >Skatīt detaļas</button>
 
-        </li>
-      </ul>
-    </div>
-    <ng-template #noUsers>
-      <p>Nav pieejamu lietotāju.</p>
-    </ng-template>
-  </div>
+    <div *ngIf="activeSection === 'users'" class="section">
+      <h3>Visi Lietotāji</h3>
+  
+      <div class="filters">
+        <label for="roleFilter">Loma:</label>
+        <select id="roleFilter" (change)="onRoleChange($event)" multiple>
+          <option *ngFor="let role of ['admin', 'sponsor', 'student']" [value]="role">{{ role }}</option>
+        </select>
+      
+        <label for="institutionFilter">Institūcija:</label>
+        <select id="institutionFilter" (change)="onInstitutionChange($event)" multiple>
+          <option *ngFor="let institution of institutions" [value]="institution">{{ institution }}</option>
+        </select>
+      
+        <label for="programFilter">Studiju programma:</label>
+        <select id="programFilter" (change)="onStudyProgramChange($event)" multiple>
+          <option *ngFor="let program of studyPrograms" [value]="program">{{ program }}</option>
+        </select>
+      
+        <button class="btn btn-primary" (click)="sortUsers()">Filtrēt</button>
+      </div>
+  
+ 
+<div *ngIf="sortedUsers.length > 0; else noFilteredUsers">
+  <ul class="list-group">
+    <li *ngFor="let user of sortedUsers" class="list-group-item">
+      <strong>{{ user.firstName }} {{ user.lastName }}</strong> - {{ user.role }}
+      <button [routerLink]="['/user-details', user._id]" class="btn btn-info btn-sm">Skatīt detaļas</button>
+    </li>
+  </ul>
 </div>
+
+<ng-template #noFilteredUsers>
+  <p>Nav lietotāju, kuri atbilst atlases kritērijiem.</p>
+</ng-template>

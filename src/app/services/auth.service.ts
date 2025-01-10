@@ -53,45 +53,30 @@ export class AuthService {
       })
     );
   }
-  getUserRole(): string | null {
-    return localStorage.getItem('role');
+  requestPasswordReset(email: string): Observable<any> {
+    const url = `${this.apiUrl}/request-password-reset`;
+    return this.http.post(url, { email });
   }
+  resetPassword(email: string, verificationCode: string, newPassword: string): Observable<any> {
+    const url = `${this.apiUrl}/reset-password`;
+    return this.http.post(url, { email, verificationCode, newPassword });
+  }
+  changePassword(userId: string, currentPassword: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/update-password/${userId}`, {
+      currentPassword,
+      newPassword,
+    });
+  }
+  
+  
   getLoggedUserById(_id: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${_id}`);
   }
-   loadUserData(): any {
-    const storedData = localStorage.getItem('userData');
-    return storedData ? JSON.parse(storedData) : null;
-  }
-  setRole(role: string) {
-    console.log('Setting role:', role); // Debug log
-    this.loggedUserRoleSubject.next(role); // Emitē lomu
-  }
-
-  getRole(): string | null {
-    return this.loggedUserRoleSubject.getValue(); // Atgriež pašreizējo lomu
-  }
-
-  clearRole() {
-    console.log('Clearing role'); // Debug log
-    this.loggedUserRoleSubject.next(null); // Notīra lomu
-  }
-  // updateUserData(data: any): void {
-  //   this.userDataSubject.next(data);
-  // }
+ 
   logout(): void {
     localStorage.clear();
     this.loggedInUserSubject.next(null);
     this.router.navigate(['/login']);
   }
-
- 
-  
-  // setCurrentUser(user: { role: string; firstName: string; lastName: string, id: string }): void {
-  //   this.currentUser = user;
-  // }
-  // getCurrentUser(): { role: string; firstName: string; lastName: string , id: string} | null {
-  //   return this.currentUser;
-  // }
   
 }

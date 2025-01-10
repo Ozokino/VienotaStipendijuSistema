@@ -42,9 +42,9 @@ constructor(private http: HttpClient) { }
     }
 
   createScholarship(scholarshipData: any): Observable<any> {
-    const sessionToken = localStorage.getItem('sessionToken'); // Iegūst tokenu no localStorage
+    const sessionToken = localStorage.getItem('sessionToken'); 
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${sessionToken}`, // Pievieno sesijas tokenu galvenē
+      Authorization: `Bearer ${sessionToken}`, 
     });
 
     return this.http.post(this.apiUrl, scholarshipData, { headers });
@@ -56,7 +56,7 @@ constructor(private http: HttpClient) { }
   updateScholarship(id: string, updates: Partial<Scholarship>): Observable<Scholarship> {
     return this.http.patch<Scholarship>(`${this.apiUrl}/${id}`, updates);
   }
-  // scholarship.service.ts
+
   getApprovedScholarships(): Observable<Scholarship[]> {
     return this.http.get<Scholarship[]>(`${this.apiUrl}/approved`);
   }

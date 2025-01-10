@@ -1,6 +1,6 @@
 <h1>Izveidot stipendiju</h1>
 <form [formGroup]="scholarshipForm" (ngSubmit)="createScholarship()">
-  <!-- Nosaukums -->
+
   <label>
     Nosaukums:
     <input type="text" formControlName="title" />
@@ -18,7 +18,6 @@
     </select>
   </label>
 
-  <!-- Apraksts -->
   <label>
     Apraksts:
     <textarea formControlName="description"></textarea>
@@ -28,7 +27,6 @@
   </div>
   <br />
 
-  <!-- Tips -->
   <label>
     Tips:
     <select formControlName="type">
@@ -38,7 +36,6 @@
   </label>
   <br />
 
-  <!-- Summa -->
   <label>
     Summa:
     <input type="text" formControlName="amount" />
@@ -48,7 +45,6 @@
   </div>
   <br />
 
-  <!-- Prasības -->
   <label>
     Prasības:
     <textarea formControlName="requirements"></textarea>
@@ -58,7 +54,6 @@
   </div>
   <br />
 
-  <!-- Termiņš -->
   <label>
     Termiņš:
     <input type="date" formControlName="deadline" />
@@ -68,6 +63,5 @@
   </div>
   <br />
 
-  <!-- Poga -->
   <button type="submit" [disabled]="scholarshipForm.invalid">Izveidot</button>
 </form>

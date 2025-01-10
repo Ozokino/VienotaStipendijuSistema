@@ -1,48 +1,98 @@
 <div class="login-container">
-    <div class="login-card">
-      <h1 class="login-title">Sveicināti Atpakaļ</h1>
-      <p class="login-subtitle">Pieslēdzieties savam kontam</p>
-  
-      <form [formGroup]="loginForm" (ngSubmit)="login()">
-        <!-- E-pasts -->
-        <div class="form-group">
-          <label for="email">E-pasts</label>
-          <input
-            id="email"
-            type="email"
-            formControlName="email"
-            class="form-control"
-            [class.invalid]="loginForm.controls['email'].touched && loginForm.controls['email'].invalid"
-          />
-          <div *ngIf="loginForm.controls['email'].hasError('required') && loginForm.controls['email'].touched" class="error-message">
-            E-pasta lauks ir obligāts.
-          </div>
-          <div *ngIf="loginForm.controls['email'].hasError('email') && loginForm.controls['email'].touched" class="error-message">
-            E-pasta formāts ir nepareizs.
-          </div>
+  <div class="login-card">
+    <h1 class="login-title" *ngIf="!isForgotPasswordStep && !isResetPasswordStep">Pieslēgties</h1>
+    <h1 class="login-title" *ngIf="isForgotPasswordStep">Aizmirsāt paroli</h1>
+    <h1 class="login-title" *ngIf="isResetPasswordStep">Atjaunot paroli</h1>
+
+    <form
+      *ngIf="!isForgotPasswordStep && !isResetPasswordStep"
+      [formGroup]="loginForm"
+      (ngSubmit)="login()"
+    >
+      <div class="form-group">
+        <label for="loginEmail">E-pasts:</label>
+        <input
+          id="loginEmail"
+          type="email"
+          class="form-control"
+          formControlName="email"
+          [class.invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+        />
+        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error-message">
+          Nepieciešams derīgs e-pasts.
         </div>
-  
-        <!-- Parole -->
-        <div class="form-group">
-          <label for="password">Parole</label>
-          <input
-            id="password"
-            type="password"
-            formControlName="password"
-            class="form-control"
-            [class.invalid]="loginForm.controls['password'].touched && loginForm.controls['password'].invalid"
-          />
-          <div *ngIf="loginForm.controls['password'].hasError('required') && loginForm.controls['password'].touched" class="error-message">
-            Paroles lauks ir obligāts.
-          </div>
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Parole:</label>
+        <input
+          id="loginPassword"
+          type="password"
+          class="form-control"
+          formControlName="password"
+          [class.invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+        />
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-message">
+          Parole ir obligāta.
         </div>
-  
-        <!-- Pieteikšanās poga -->
-        <button type="submit" [disabled]="loginForm.invalid" class="login-button">Pieteikties</button>
-  
-        <!-- Kļūdas ziņojums -->
-        <p class="form-error" *ngIf="loginError">{{ loginError }}</p>
-      </form>
-    </div>
+      </div>
+      <button type="submit" class="login-button" [disabled]="loginForm.invalid">Pieslēgties</button>
+      <button type="button" class="secondary-button" (click)="isForgotPasswordStep = true">Aizmirsāt paroli?</button>
+    </form>
+
+    <form
+      *ngIf="isForgotPasswordStep"
+      [formGroup]="forgotPasswordForm"
+      (ngSubmit)="sendForgotPasswordRequest()"
+    >
+      <div class="form-group">
+        <label for="forgotEmail">Ievadiet savu e-pastu:</label>
+        <input
+          id="forgotEmail"
+          type="email"
+          class="form-control"
+          formControlName="email"
+          [class.invalid]="forgotPasswordForm.get('email')?.invalid && forgotPasswordForm.get('email')?.touched"
+        />
+        <div *ngIf="forgotPasswordForm.get('email')?.invalid && forgotPasswordForm.get('email')?.touched" class="error-message">
+          Nepieciešams derīgs e-pasts.
+        </div>
+      </div>
+      <button type="submit" class="login-button" [disabled]="forgotPasswordForm.invalid">Nosūtīt atjaunošanas kodu</button>
+      <button type="button" class="secondary-button" (click)="isForgotPasswordStep = false">Atpakaļ uz pieslēgšanos</button>
+    </form>
+
+    <form
+      *ngIf="isResetPasswordStep"
+      [formGroup]="resetPasswordForm"
+      (ngSubmit)="resetPassword()"
+    >
+      <div class="form-group">
+        <label for="resetCode">Apstiprinājuma kods:</label>
+        <input
+          id="resetCode"
+          type="text"
+          class="form-control"
+          formControlName="verificationCode"
+          [class.invalid]="resetPasswordForm.get('verificationCode')?.invalid && resetPasswordForm.get('verificationCode')?.touched"
+        />
+        <div *ngIf="resetPasswordForm.get('verificationCode')?.invalid && resetPasswordForm.get('verificationCode')?.touched" class="error-message">
+          Apstiprinājuma kodam jābūt 6 cipariem.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="newPassword">Jaunā parole:</label>
+        <input
+          id="newPassword"
+          type="password"
+          class="form-control"
+          formControlName="newPassword"
+          [class.invalid]="resetPasswordForm.get('newPassword')?.invalid && resetPasswordForm.get('newPassword')?.touched"
+        />
+        <div *ngIf="resetPasswordForm.get('newPassword')?.invalid && resetPasswordForm.get('newPassword')?.touched" class="error-message">
+          Parolei jābūt vismaz 6 rakstzīmēm.
+        </div>
+      </div>
+      <button type="submit" class="login-button" [disabled]="resetPasswordForm.invalid">Atjaunot paroli</button>
+    </form>
   </div>
-  
+</div>

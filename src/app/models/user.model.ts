@@ -1,31 +1,29 @@
-// Lietotāja interfeiss (Frontend modelis)
 export interface User {
     _id: string;
     firstName: string;
     lastName: string;
     email: string;
-    university?: string; // Tikai studentiem
+    institution?: string; 
     studyProgram?: string;
-    role: 'student' | 'sponsor' | 'admin'; // Lietotāja loma
+    role: 'student' | 'sponsor' | 'admin'; 
     sponsorVerificationStatus?: 'pending' | 'approved' | 'rejected';
-    isVerified: boolean; // Vai lietotājs ir verificēts
-    sessionToken: string; // Sīkdatne/autentifikācijas token
+    isVerified: boolean; 
+    sessionToken: string; 
     password: string;
 }
 
-// Pagaidu lietotāja interfeiss reģistrācijai (bez `_id`)
+
 export type TempUser = Omit<User, '_id' | 'isVerified'>;
 export type UserLoginModel = Omit<AuthenticatedUser, '_id' | 'firstName' | 'lastName' |'sessionToken'>;
 
 
-// Lietotāja interfeiss autentifikācijas laikā
 export interface AuthenticatedUser {
     _id: string;
     firstName: string;
     lastName: string;
     email: string;
     role: 'student' | 'sponsor' | 'admin';
-    sessionToken: string; // Sīkdatne/autentifikācijas token
+    sessionToken: string; 
     password: string;
     sponsorVerificationStatus?: 'pending' | 'approved' | 'rejected';
 }

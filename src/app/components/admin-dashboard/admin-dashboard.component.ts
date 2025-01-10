@@ -6,6 +6,7 @@ import { Scholarship } from '../../models/scholarship.model';
 import { Subject, takeUntil } from 'rxjs';
 import { User } from '../../models/user.model';
 import { RouterLink } from '@angular/router';
+import educationData from '../../../assets/educationData.json';
 
 @Component({
   selector: 'stipendo-admin-dashboard',
@@ -14,11 +15,19 @@ import { RouterLink } from '@angular/router';
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
 })
-export class AdminDashboardComponent implements OnInit{
+export class AdminDashboardComponent implements OnInit {
   pendingSponsors: User[] = [];
   pendingScholarships: Scholarship[] = [];
   users: User[] = [];
-  activeSection: 'sponsors' | 'scholarships' | 'users' = 'sponsors'; // Default section
+  sortedUsers: User[] = [];
+  institutions: string[] = educationData.institutions;
+  studyPrograms: string[] = educationData.studyPrograms;
+  activeSection: 'sponsors' | 'scholarships' | 'users' = 'sponsors'; 
+
+  roleSorting: string[] = [];
+  institutionSorting: string[] = [];
+  studyProgramSorting: string[] = [];
+
   private destroy$: Subject<void> = new Subject<void>;
   users$ = this.userService.users$;
 
@@ -30,7 +39,10 @@ export class AdminDashboardComponent implements OnInit{
   ngOnInit(): void {
     this.loadPendingSponsors();
     this.loadPendingScholarships();
-    this.userService.getAllUsers().pipe(takeUntil(this.destroy$)).subscribe();
+    this.userService.getAllUsers().pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.users = data;
+      this.sortedUsers = [...this.users];
+    });
   }
 
   ngOnDestroy(): void {
@@ -45,144 +57,79 @@ export class AdminDashboardComponent implements OnInit{
   loadPendingSponsors(): void {
     this.userService.getPendingSponsors().pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => (this.pendingSponsors = data),
-      error: (err) => console.error('Error loading sponsors:', err),
+      error: (err) => console.error('Kļūda, ielādējot sponsorus:', err),
     });
   }
- loadPendingScholarships(): void {
+
+  loadPendingScholarships(): void {
     this.scholarshipService.getPendingScholarships().pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => (this.pendingScholarships = data),
-      error: (err) => console.error('Error loading scholarships:', err),
+      error: (err) => console.error('Kļūda, ielādējot stipendijas:', err),
     });
   }
 
   approveSponsor(id: string): void {
     this.userService.approveASponsor(id, 'approved').subscribe({
       next: () => this.loadPendingSponsors(),
-      error: (err) => console.error('Error approving sponsor:', err),
+      error: (err) => console.error('Kļūda, apstiprinot sponsoru:', err),
     });
   }
 
   rejectSponsor(id: string): void {
     this.userService.approveASponsor(id, 'rejected').subscribe({
       next: () => this.loadPendingSponsors(),
-      error: (err) => console.error('Error rejecting sponsor:', err),
+      error: (err) => console.error('Kļūda, noraidot sponsoru:', err),
     });
   }
 
- 
   approveScholarship(id: string): void {
     this.scholarshipService.approveAScholarship(id, 'approved').subscribe({
       next: () => this.loadPendingScholarships(),
-      error: (err) => console.error('Error approving scholarship:', err),
+      error: (err) => console.error('Kļūda, apstiprinot stipendiju:', err),
     });
   }
 
   rejectScholarship(id: string): void {
     this.scholarshipService.approveAScholarship(id, 'rejected').subscribe({
       next: () => this.loadPendingScholarships(),
-      error: (err) => console.error('Error rejecting scholarship:', err),
+      error: (err) => console.error('Kļūda, noraidot stipendiju:', err),
     });
   }
 
-  loadUsers(): void {
-    this.userService.getAllUsers().pipe(takeUntil(this.destroy$)).subscribe({
-      next: (data) => (this.users = data),
-      error: (err) => console.error('Error loading users:', err),
+  onRoleChange(event: Event): void {
+    const selectedOptions = Array.from((event.target as HTMLSelectElement).selectedOptions);
+    this.roleSorting = selectedOptions.map((option) => option.value);
+    console.log('Lomu atlase atjaunota:', this.roleSorting);
+  }
+
+  onInstitutionChange(event: Event): void {
+    const selectedOptions = Array.from((event.target as HTMLSelectElement).selectedOptions);
+    this.institutionSorting = selectedOptions.map((option) => option.value);
+    console.log('Institūciju atlase atjaunota:', this.institutionSorting);
+  }
+
+  onStudyProgramChange(event: Event): void {
+    const selectedOptions = Array.from((event.target as HTMLSelectElement).selectedOptions);
+    this.studyProgramSorting = selectedOptions.map((option) => option.value);
+    console.log('Studiju programmu atlase atjaunota:', this.studyProgramSorting);
+  }
+
+  sortUsers(): void {
+    const roles = this.roleSorting.length ? this.roleSorting : [...new Set(this.users.map((u) => u.role))];
+    const institutions = this.institutionSorting.length ? this.institutionSorting : this.institutions;
+    const programs = this.studyProgramSorting.length ? this.studyProgramSorting : this.studyPrograms;
+
+    console.log('Atlases kritēriji:', { roles, institutions, programs });
+
+    this.sortedUsers = this.users.filter((user) => {
+      const userInstitution = user.institution || '';
+      const userStudyProgram = user.studyProgram || '';
+
+      const matchesRole = roles.includes(user.role);
+      const matchesInstitution = institutions.includes(userInstitution);
+      const matchesProgram = programs.includes(userStudyProgram);
+
+      return matchesRole && matchesInstitution && matchesProgram;
     });
   }
-
-  viewUserDetails(userId: string): void {
-    console.log('Viewing user details for:', userId);
-    // Implement navigation or modal logic here
-  }
-
 }
-//  pendingSponsors: any[] = [];
-//   pendingScholarships: any[] = [];
-//   users: any[] = [];
-
-//   constructor(
-//     private userService: UserService,
-//     private scholarshipService: ScholarshipService
-//   ) { }
-
-//   ngOnInit(): void {
-//     this.loadPendingSponsors();
-//     this.loadPendingScholarships();
-//     this.loadUsers();
-//   }
-
-//   // Ielādē sponsoru sarakstu
-//   loadPendingSponsors(): void {
-//     this.userService.getPendingSponsors().subscribe({
-//       next: (data) => (this.pendingSponsors = data),
-//       error: (err) => console.error('Kļūda, ielādējot sponsorus:', err),
-//     });
-//   }
-//   filterSponsors(event: Event): void {
-//     const searchTerm = (event.target as HTMLInputElement).value.toLowerCase();
-//     this.pendingSponsors = this.pendingSponsors.filter((sponsor) =>
-//       sponsor.email.toLowerCase().includes(searchTerm)
-//     );
-//   }
-//   // Apstiprina sponsoru
-//   approveSponsor(id: string): void {
-//     this.userService.approveSponsor(id, 'approved').subscribe({
-//       next: () => this.loadPendingSponsors(),
-//       error: (err) => console.error('Kļūda, apstiprinot sponsoru:', err),
-//     });
-//   }
-
-//   // Noraida sponsoru
-//   rejectSponsor(id: string): void {
-//     this.userService.approveSponsor(id, 'rejected').subscribe({
-//       next: () => this.loadPendingSponsors(),
-//       error: (err) => console.error('Kļūda, noraidot sponsoru:', err),
-//     });
-//   }
-
-//   // Ielādē stipendiju sarakstu
-//   loadPendingScholarships(): void {
-//     this.scholarshipService.getPendingScholarships().subscribe({
-//       next: (data) => (this.pendingScholarships = data),
-//       error: (err) => console.error('Kļūda, ielādējot stipendijas:', err),
-//     });
-//   }
-
-//   // Apstiprina stipendiju
-//   approveScholarship(id: string): void {
-//     this.scholarshipService.approveScholarship(id, 'approved').subscribe({
-//       next: () => this.loadPendingScholarships(),
-//       error: (err) => console.error('Kļūda, apstiprinot stipendiju:', err),
-//     });
-//   }
-
-//   // Noraida stipendiju
-//   rejectScholarship(id: string): void {
-//     this.scholarshipService.approveScholarship(id, 'rejected').subscribe({
-//       next: () => this.loadPendingScholarships(),
-//       error: (err) => console.error('Kļūda, noraidot stipendiju:', err),
-//     });
-//   }
-
-//   // Ielādē lietotāju sarakstu
-//   loadUsers(): void {
-//     this.userService.getAllUsers().subscribe({
-//       next: (data) => (this.users = data),
-//       error: (err) => console.error('Kļūda, ielādējot lietotājus:', err),
-//     });
-//   }
-
-//   // Rediģē lietotāju
-//   editUser(id: string): void {
-//     // Navigācija uz rediģēšanas lapu vai modal loga atvēršana
-//     console.log('Rediģē lietotāju:', id);
-//   }
-
-//   // Dzēš lietotāju
-//   deleteUser(id: string): void {
-//     this.userService.deleteAUser(id).subscribe({
-//       next: () => this.loadUsers(),
-//       error: (err) => console.error('Kļūda, dzēšot lietotāju:', err),
-//     });
-//   }

@@ -1,20 +1,19 @@
-/* Globālie mainīgie */
-$primary-color: #4a90e2; // Galvenā krāsa
-$error-color: #ff6b6b; // Kļūdas krāsa
-$border-radius: 5px; // Pogas un ievades lauku stūrīši
-$font-family: 'Arial', sans-serif; // Fonta ģimene
+$primary-color: #4a90e2; 
+$error-color: #ff6b6b; 
+$border-radius: 5px; 
+$font-family: 'Arial', sans-serif; 
 
-/* Formas konteiners */
+
 form {
   display: flex;
   flex-direction: column;
   max-width: 500px;
-  margin: 0 auto; /* Centrē formu */
+  margin: 0 auto; 
   padding: 20px;
-  background-color: #f9f9f9; /* Viegli pelēks fons */
-  border: 1px solid #ddd; /* Rāmis */
+  background-color: #f9f9f9; 
+  border: 1px solid #ddd; 
   border-radius: $border-radius;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Viegls ēnojums */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 
   h1 {
     text-align: center;

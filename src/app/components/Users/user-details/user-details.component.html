@@ -1,10 +1,82 @@
 <div *ngIf="user$ | async as user; else loading">
   <h2>Profils</h2>
-  <p><strong>Vārds:</strong> {{ user.firstName }}</p>
-  <p><strong>Uzvārds:</strong> {{ user.lastName }}</p>
-  <p><strong>E-pasts:</strong> {{ user.email }}</p>
-  <p><strong>Loma:</strong> {{ user.role }}</p>
-  <p *ngIf="user.university"><strong>Universitāte:</strong> {{ user.university }}</p>
+
+  <div *ngIf="!editMode && !showPasswordForm">
+    <p><strong>Vārds:</strong> {{ user.firstName }}</p>
+    <p><strong>Uzvārds:</strong> {{ user.lastName }}</p>
+    <p><strong>E-pasts:</strong> {{ user.email }}</p>
+    <p><strong>Loma:</strong> {{ user.role }}</p>
+    <p *ngIf="user.institution"><strong>Universitāte:</strong> {{ user.institution }}</p>
+    <button class="btn btn-primary" (click)="toggleEditMode()">Rediģēt</button>
+    <button class="btn btn-secondary" (click)="togglePasswordForm()">Mainīt paroli</button>
+    <button class="btn btn-danger" (click)="deleteUser()">Dzēst</button>
+  </div>
+
+  <form *ngIf="editMode" [formGroup]="userForm" (ngSubmit)="saveChanges()">
+    <div class="form-group">
+      <label for="firstName">Vārds:</label>
+      <input
+        id="firstName"
+        formControlName="firstName"
+        type="text"
+        class="form-control"
+        placeholder="Ievadiet vārdu"
+      />
+      <div *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched">
+        <small class="text-danger">Vārds ir obligāts.</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Uzvārds:</label>
+      <input
+        id="lastName"
+        formControlName="lastName"
+        type="text"
+        class="form-control"
+        placeholder="Ievadiet uzvārdu"
+      />
+      <div *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched">
+        <small class="text-danger">Uzvārds ir obligāts.</small>
+      </div>
+    </div>
+
+    <button class="btn btn-success" type="submit" [disabled]="userForm.invalid">Saglabāt</button>
+    <button class="btn btn-secondary" type="button" (click)="toggleEditMode()">Atcelt</button>
+  </form>
+
+  <form *ngIf="showPasswordForm" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+    <div class="form-group">
+      <label for="currentPassword">Pašreizējā parole:</label>
+      <input
+        id="currentPassword"
+        formControlName="currentPassword"
+        type="password"
+        class="form-control"
+        placeholder="Ievadiet pašreizējo paroli"
+      />
+      <div *ngIf="changePasswordForm.get('currentPassword')?.invalid && changePasswordForm.get('currentPassword')?.touched">
+        <small class="text-danger">Pašreizējā parole ir obligāta un jābūt vismaz 6 rakstzīmēm.</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="newPassword">Jaunā parole:</label>
+      <input
+        id="newPassword"
+        formControlName="newPassword"
+        type="password"
+        class="form-control"
+        placeholder="Ievadiet jauno paroli"
+      />
+      <div *ngIf="changePasswordForm.get('newPassword')?.invalid && changePasswordForm.get('newPassword')?.touched">
+        <small class="text-danger">Jaunā parole ir obligāta un jābūt vismaz 6 rakstzīmēm.</small>
+      </div>
+    </div>
+
+    <button class="btn btn-success" type="submit" [disabled]="changePasswordForm.invalid">Saglabāt</button>
+    <button class="btn btn-secondary" type="button" (click)="togglePasswordForm()">Atcelt</button>
+  </form>
 </div>
 
 <ng-template #loading>

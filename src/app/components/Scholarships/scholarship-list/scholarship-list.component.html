@@ -1,15 +1,28 @@
 <h1>Stipendiju Saraksts</h1>
 
-<!-- Parāda stipendijas, ja ir pieejamas -->
-<div *ngIf="scholarships.length > 0; else noScholarships">
+<div class="filters">
+  <label for="programFilter">Studiju programma:</label>
+  <select id="programFilter" (change)="onProgramChange($event)">
+    <option value="">Visas programmas</option>
+    <option *ngFor="let program of programs" [value]="program">{{ program }}</option>
+  </select>
+
+  <label for="sortFilter">Šķirot pēc:</label>
+  <select id="sortFilter" (change)="onSortChange($event)">
+    <option value="">Noklusējums</option>
+    <option value="studyProgram">Studiju programma</option>
+    <option value="deadline">Termiņš</option>
+  </select>
+</div>
+
+<div *ngIf="filteredScholarships.length > 0; else noScholarships">
   <ul>
-    <li *ngFor="let scholarship of scholarships">
-      <h2>{{ scholarship.title}}</h2>
+    <li *ngFor="let scholarship of filteredScholarships">
+      <h2>{{ scholarship.title }}</h2>
       <p><strong>Apraksts:</strong> {{ scholarship.description }}</p>
       <p><strong>Tips:</strong> {{ scholarship.type === 'one-time' ? 'Vienreizēja' : 'Ikmēneša' }}</p>
       <p><strong>Summa:</strong> {{ scholarship.amount }}</p>
       <p><strong>Termiņš:</strong> {{ scholarship.deadline | date }}</p>
-      <!-- Navigācija uz detaļu komponenti -->
       <button [routerLink]="['/scholarship-details', scholarship._id]" class="normal-links">
         Skatīt detaļas
       </button>
@@ -17,7 +30,6 @@
   </ul>
 </div>
 
-<!-- Tukša saraksta gadījumā -->
 <ng-template #noScholarships>
   <p>Pašlaik nav pieejamu stipendiju.</p>
 </ng-template>

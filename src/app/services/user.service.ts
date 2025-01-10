@@ -37,8 +37,8 @@ export class UserService {
   deleteAUser(id: string): Observable<User> {
     return this.http.delete<User>(`${this.apiUrl}/${id}`);
   }
-  editAUser(id: string, user: User): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/${id}`, user);
+  updateUser(id: string, userData: Partial<User>): Observable<User> {
+    return this.http.patch<User>(`${this.apiUrl}/${id}`, userData);
   }
   getUserByEmail(email: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/email/${email}`);
